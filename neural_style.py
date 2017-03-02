@@ -111,9 +111,9 @@ def main():
     if initial is not None:
         initial = scipy.misc.imresize(imread(initial), content_image.shape[:2])
 
-    if options.checkpoint_output and "%s" not in options.checkpoint_output:
-        parser.error("To save intermediate images, the checkpoint output "
-                     "parameter must contain `%s` (e.g. `foo%s.jpg`)")
+    #  if options.checkpoint_output and "%s" not in options.checkpoint_output:
+        #  parser.error("To save intermediate images, the checkpoint output "
+                     #  "parameter must contain `%s` (e.g. `foo%s.jpg`)")
 
     for iteration, image in stylize(
         network=options.network,
