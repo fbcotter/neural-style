@@ -51,7 +51,7 @@ if [ "$REDUCE" = true ] ; then
     ffmpeg -y -i $STYLE -vf scale=500:-1 "$OUTDIR"/style.jpg
 else
     cp $PHOTO "$OUTDIR"/in.jpg
-    cp $STYLE "OUTDIR"/style.jpg
+    cp $STYLE "$OUTDIR"/style.jpg
 fi
 
 # Do the transfer
@@ -60,5 +60,5 @@ python3 neural_style.py --content "$OUTDIR/in.jpg" --styles "$OUTDIR"/style.jpg 
     $OUTDIR/out%04d.jpg --checkpoint-iterations 2
 
 # Convert to a video
-ffmpeg -i $OUTDIR/out%04d.jpg -q:v 1 $OUTDIR/process.avi
+ffmpeg -y -pattern_type glob -i '$OUTDIR/out0*.jpg' -q:v 1 $OUTDIR/process.avi
 
