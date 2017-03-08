@@ -139,6 +139,8 @@ def stylize(network, initial, initial_noiseblend, content, styles, preserve_colo
         best_loss = float('inf')
         best = None
         with tf.Session() as sess:
+            tf.summary.FileWriter('logdir', sess.graph)
+
             sess.run(tf.global_variables_initializer())
             stderr.write('Optimization started...\n')
             if (print_iterations and print_iterations != 0):
