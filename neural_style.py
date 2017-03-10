@@ -6,6 +6,7 @@ import numpy as np
 import scipy.misc
 
 from stylize import stylize
+import py3nvml
 
 import math
 from argparse import ArgumentParser
@@ -102,6 +103,9 @@ def build_parser():
     parser.add_argument('--pooling',
             dest='pooling', help='pooling layer configuration: max or avg (default %(default)s)',
             metavar='POOLING', default=POOLING)
+    parser.add_argument('--num_gpus',
+            dest='num_gpus', help='number of gpus to use',
+            metavar='NUM_GPUS' ,default=1,type=int)
     return parser
 
 
@@ -150,9 +154,18 @@ def main():
         if options.initial_noiseblend < 1.0:
             initial = content_image
 
-    if options.checkpoint_output and "%s" not in options.checkpoint_output:
-        parser.error("To save intermediate images, the checkpoint output "
-                     "parameter must contain `%s` (e.g. `foo%s.jpg`)")
+    #  if options.checkpoint_output and "%s" not in options.checkpoint_output:
+        #  parser.error("To save intermediate images, the checkpoint output "
+                     #  "parameter must contain `%s` (e.g. `foo%s.jpg`)")
+
+    # Grab the gpus for our task
+    if py3nvml.grab_gpus(num_gpus=options.num_gpus):
+        print('#' * 30)
+        print('#' * 30)
+        print(' Warning. Could not grab enough gpus. Continuing on CPU only ')
+        print('')
+        print('#' * 30)
+        print('#' * 30)
 
     for iteration, image in stylize(
         network=options.network,
